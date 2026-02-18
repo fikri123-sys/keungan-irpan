@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keuangan IKI - Personal Finance</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app">
+        <!-- Header dengan Wave -->
+        <div class="header-wave">
+            <svg viewBox="0 0 500 150" preserveAspectRatio="none">
+                <path d="M0.00,49.98 C150.00,150.00 349.20,-50.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" 
+                    style="stroke: none; fill: #4361ee;"></path>
+            </svg>
+        </div>
+
+        <div class="container">
+            <!-- Header Aplikasi -->
+            <div class="app-header">
+                <h1><i class="fas fa-chart-line"></i> Keuangan IKI</h1>
+                <p class="date-display">
+                    <i class="far fa-calendar-alt"></i> 
+                    <span id="currentDate"></span>
+                </p>
+            </div>
+
+            <!-- Card Saldo Utama dengan Efek Glassmorphism -->
+            <div class="balance-card">
+                <div class="balance-label">
+                    <i class="fas fa-wallet"></i> Saldo Total
+                </div>
+                <div class="balance-amount">
+                    Rp <span id="totalBalance">0</span>
+                </div>
+                <div class="balance-footer">
+                    <span class="update-time">
+                        <i class="far fa-clock"></i> Update Real-time
+                    </span>
+                </div>
+            </div>
+
+            <!-- Ringkasan Pemasukan & Pengeluaran -->
+            <div class="summary-cards">
+                <div class="summary-card income">
+                    <div class="summary-icon">
+                        <i class="fas fa-arrow-up"></i>
+                    </div>
+                    <div class="summary-content">
+                        <span class="summary-label">Pemasukan</span>
+                        <span class="summary-amount" id="totalIncome">Rp 0</span>
+                    </div>
+                </div>
+                <div class="summary-card expense">
+                    <div class="summary-icon">
+                        <i class="fas fa-arrow-down"></i>
+                    </div>
+                    <div class="summary-content">
+                        <span class="summary-label">Pengeluaran</span>
+                        <span class="summary-amount" id="totalExpense">Rp 0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Periode dengan Desain Modern -->
+            <div class="period-filter">
+                <button class="filter-btn active" onclick="filterTransactions('all')">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Semua</span>
+                </button>
+                <button class="filter-btn" onclick="filterTransactions('day')">
+                    <i class="fas fa-sun"></i>
+                    <span>Hari</span>
+                </button>
+                <button class="filter-btn" onclick="filterTransactions('month')">
+                    <i class="fas fa-calendar-month"></i>
+                    <span>Bulan</span>
+                </button>
+                <button class="filter-btn" onclick="filterTransactions('year')">
+                    <i class="fas fa-calendar-year"></i>
+                    <span>Tahun</span>
+                </button>
+            </div>
+
+            <!-- Chart Bulanan (Statistik Visual) -->
+            <div class="monthly-chart-card">
+                <div class="chart-header">
+                    <h3><i class="fas fa-chart-bar"></i> Statistik Bulan Ini</h3>
+                    <span class="month-name" id="currentMonth"></span>
+                </div>
+                
+                <!-- Progress Bar untuk Pemasukan vs Pengeluaran -->
+                <div class="monthly-stats">
+                    <div class="stat-row">
+                        <div class="stat-label">
+                            <i class="fas fa-arrow-up" style="color: #10b981;"></i>
+                            <span>Pemasukan Bulan Ini</span>
+                        </div>
+                        <div class="stat-value" id="monthlyIncome">Rp 0</div>
+                    </div>
+                    <div class="stat-row">
+                        <div class="stat-label">
+                            <i class="fas fa-arrow-down" style="color: #ef4444;"></i>
+                            <span>Pengeluaran Bulan Ini</span>
+                        </div>
+                        <div class="stat-value" id="monthlyExpense">Rp 0</div>
+                    </div>
+                    
+                    <!-- Progress Bar -->
+                    <div class="progress-container">
+                        <div class="progress-label">
+                            <span>Sisa Bulan Ini</span>
+                            <span id="monthlyRemaining">Rp 0</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="monthlyProgress" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Tambah Transaksi dengan Desain Compact -->
+            <div class="add-transaction-card">
+                <h3><i class="fas fa-plus-circle"></i> Tambah Transaksi</h3>
+                
+                <div class="form-grid">
+                    <input type="text" id="desc" placeholder="Keterangan" class="form-input">
+                    <input type="number" id="amount" placeholder="Jumlah" class="form-input">
+                    
+                    <div class="type-selector">
+                        <label class="type-option income-type">
+                            <input type="radio" name="type" value="income" checked>
+                            <i class="fas fa-arrow-up"></i>
+                            <span>Pemasukan</span>
+                        </label>
+                        <label class="type-option expense-type">
+                            <input type="radio" name="type" value="expense">
+                            <i class="fas fa-arrow-down"></i>
+                            <span>Pengeluaran</span>
+                        </label>
+                    </div>
+                    
+                    <button onclick="addTransaction()" class="btn-add">
+                        <i class="fas fa-plus"></i> Tambah
+                    </button>
+                </div>
+            </div>
+
+            <!-- Info Filter -->
+            <div class="filter-info" id="filterInfo">
+                <i class="fas fa-info-circle"></i>
+                <span>Menampilkan semua transaksi</span>
+            </div>
+
+            <!-- Daftar Transaksi -->
+            <div class="transactions-list" id="transactionList">
+                <!-- Akan diisi JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
